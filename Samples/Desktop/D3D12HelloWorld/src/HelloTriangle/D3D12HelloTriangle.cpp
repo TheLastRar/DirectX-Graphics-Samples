@@ -354,7 +354,7 @@ void D3D12HelloTriangle::LoadPipeline()
         depthDesc.Height = m_height;
         depthDesc.DepthOrArraySize = 1;
         depthDesc.MipLevels = 1;
-        depthDesc.Format = DXGI_FORMAT_D32_FLOAT;
+        depthDesc.Format = DXGI_FORMAT_R32_TYPELESS;
         depthDesc.SampleDesc.Count = 1;
         depthDesc.SampleDesc.Quality = 0;
         depthDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
@@ -501,7 +501,9 @@ void D3D12HelloTriangle::LoadPipeline()
         rtvHandle.Offset(1, m_rtvDescriptorSize);
 
         // Create DSV
-        m_device->CreateDepthStencilView(m_depthTarget.Get(), nullptr, dsvHandle);
+        D3D12_DEPTH_STENCIL_VIEW_DESC dsvd{DXGI_FORMAT_D32_FLOAT, D3D12_DSV_DIMENSION_TEXTURE2D, D3D12_DSV_FLAG_NONE};
+
+        m_device->CreateDepthStencilView(m_depthTarget.Get(), &dsvd, dsvHandle);
         m_dsvHandle = dsvHandle;
         dsvHandle.Offset(1, m_dsvDescriptorSize);
 
